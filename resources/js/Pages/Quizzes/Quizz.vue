@@ -1,4 +1,6 @@
 <script setup>
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
 import { Link } from '@inertiajs/vue3';
 defineProps(['quizz']);
 </script>
@@ -11,7 +13,8 @@ defineProps(['quizz']);
                 <div class="h-20 w-20  bg-yellow-500 flex items-center justify-center rounded-full">
                     <div class="text-center">{{ quizz.type }}</div>
                 </div>
-                <button>
+                <Dropdown>
+                    <template #trigger>
                         <button class="text-gray-500">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-three-dots" viewBox="0 0 16 16">
@@ -19,17 +22,20 @@ defineProps(['quizz']);
                                     d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
                             </svg>
                         </button>
+                    </template>
+                    <template #content>
                         <button
                             class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-200 transition duration-150 ease-in-out">
                             Activer
                         </button>
-                        <Link :href="route('quizzes.show', quizz)" method="get" :active="route().current('quizzes.show')" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-200 transition duration-150 ease-in-out">
+                        <a :href="route('quizzes.show', quizz)" method="get" :active="route().current('quizzes.show')" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-200 transition duration-150 ease-in-out">
                         Modifier
-                        </Link>
-                        <Link :href="route('quizzes.destroy', quizz)" method="DELETE" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-200 transition duration-150 ease-in-out">
+                        </a>
+                        <a :href="route('quizzes.destroy', quizz)" method="DELETE" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-200 transition duration-150 ease-in-out">
                             Supprimer
-                        </Link>
-                </button>
+                        </a>
+                    </template>
+                </Dropdown>
             </div>
 
 
