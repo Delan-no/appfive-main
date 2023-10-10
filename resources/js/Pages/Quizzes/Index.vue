@@ -1,7 +1,22 @@
 <script setup>
 import Quizz from '../Quizzes/Quizz.vue';
+import { ref, watch } from 'vue';
 
-defineProps(['quizzes'])
+const props = defineProps(['quizzes']);
+let quizzes = ref(props.quizzes);
+
+// Champ de filtre pour la recherche
+const searchValue = ref('');
+
+// Fonction pour filtrer les quizzes
+function filterQuizzes() {
+	quizzes.value = props.quizzes.filter((quiz) =>
+	quiz.type.toLowerCase().includes(searchValue.value.toLocaleLowerCase()));
+}
+
+watch(searchValue, () => {
+	filterQuizzes();
+});
 </script>
 
 <template>
@@ -19,7 +34,7 @@ defineProps(['quizzes'])
 							<div class="flex items-center justify-between">
 								<h2 class="font-semibold text-slate-900">Quizzes</h2>
 								<a href="/new"
-									class="hover:bg-amber-400 group flex items-center rounded-md bg-amber-300 text-slate-900 font-semibold text-sm font-medium pl-2 pr-3 py-2 shadow-sm">
+									class="hover:bg-amber-400 group flex items-center rounded-md bg-yellow-800 text-slate-900 font-semibold text-sm font-medium pl-2 pr-3 py-2 shadow-sm">
 									<svg width="20" height="20" fill="currentColor" class="mr-2" aria-hidden="true">
 										<path
 											d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
@@ -36,14 +51,16 @@ defineProps(['quizzes'])
 								</svg>
 								<input
 									class="focus:ring-2 focus:ring-yellow-200 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-sm"
-									type="text" aria-label="Filter projects" placeholder="Filter quizzes...">
+									type="text" aria-label="Filter projects" placeholder="Filter quizzes..." v-model="searchValue">
 							</form>
 						</header>
 						<div class="mt-16 rounded-lg p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 text-sm leading-6">
 							<div class="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
 								<Quizz v-for="quiz 	 in quizzes" :key="quiz.id" :quizz='quiz' />
-
-
+							</div>
+							<div class="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8" v-if="quizzes.length === 0">
+								No Quizzes found.
+	
 							</div>
 						</div>
 						<a :href="route('quizzes.create')"

@@ -8,7 +8,7 @@ defineProps(['quizz']);
         class="hover:bg-gray-400 group flex rounded-3xl border-solid relative bg-gray-100 border-amber-400 text-gray-800 text-xl font-medium pl-2 pr-3 py-2 shadow-sm">
         <div>
             <div class="flex justify-between relative">
-                <div class="h-20 w-20  bg-yellow-500 flex items-center justify-center rounded-full">
+                <div class="h-20 w-20  bg-yellow-800 flex items-center justify-center rounded-full">
                     <div class="text-center">{{ quizz.type }}</div>
                 </div>
                 <button>
