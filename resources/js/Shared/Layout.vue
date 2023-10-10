@@ -29,6 +29,7 @@
               <div class="mr-4 mt-1">{{ auth.user.account.name }}</div>
             -->
           <div class="mr-4 mt-1">Highfive</div>
+          
           <Dropdown class="mt-1" placement="bottom-end">
             <template #default>
               <div class="group flex items-center cursor-pointer select-none">
@@ -91,5 +92,4 @@ export default {
     auth: Object,
   }
 }
-
 </script>
