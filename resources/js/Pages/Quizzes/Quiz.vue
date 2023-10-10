@@ -24,6 +24,7 @@ export default {
 			quizId: uuid(),
 			questionId: uuid(),
 			answerId: 0,
+			monQuiz: localStorage,
 			quizForm: this.$inertia.form({
 				id: this.quizId,
 				title: '',
@@ -31,6 +32,8 @@ export default {
 				type: '',
 				visibility: false,
 				duration: 0,
+				questions:[],
+				possibleAnswers:[],
 			}),
 			questionForm: this.$inertia.form({
 				id: this.questionId,
@@ -63,7 +66,15 @@ export default {
 			this.quizForm.post('/quizzes');
 		},
 		store() {
-			this.quizzes.post('/quizzes');
+			// this.quizForm.questions = this.quizzes
+			for (let i = 0; i < this.quizzes.length; i++) {
+				this.quizForm.questions.push(this.quizzes[i].question)
+				for (let u = 0; u < this.quizzes[i].reponses.length; u++) {
+					this.quizForm.possibleAnswers.push(this.quizzes[i].reponses[u])
+				}
+			}
+			this.monQuiz.clear();
+			this.quizForm.post('/quizzes');
 			
 		},
 		storePossibleAns() {
@@ -79,8 +90,10 @@ export default {
 			this.$inertia.delete(`/chirps/${chirp.id}`)
 		},
 		addQuestion() {
+			console.log(this.quizForm.id);
 			this.i = 0;
 			this.int = 0;
+			this.quizForm.id = this.quizId;
 			this.quizzes.push({
 
 				question: {
@@ -91,12 +104,20 @@ export default {
 				},
 				reponses: []
 			});
+			this.monQuiz.setItem('quiz', JSON.stringify(this.quizzes));
+			this.monQuiz.setItem('id', JSON.stringify(this.quizForm.id));
+			this.monQuiz.setItem('title', JSON.stringify(this.quizForm.title));
+			this.monQuiz.setItem('description', JSON.stringify(this.quizForm.description));
+			this.monQuiz.setItem('type', JSON.stringify(this.quizForm.type));
+			this.monQuiz.setItem('visibility', JSON.stringify(this.quizForm.visibility));
+			this.monQuiz.setItem('duration', JSON.stringify(this.quizForm.duration));
 			this.questionForm.text = '';
 			this.questionForm.image = 'sqfsdfqf';
 			this.questionForm.type = '';
 			// this.quiz = false;
 			console.log(this.quizzes);
 			this.g++
+			this.monQuiz.setItem('g', JSON.stringify(this.g));
 			this.questionId = uuid();
 		},
 		addAnsers() {
@@ -106,12 +127,15 @@ export default {
 					id: this.answerId,
 					text: this.answersForm.text,
 					etat: this.answersForm.etat,
-					question_id: this.quizzes[this.g - 1].id,
+					question_id: this.quizzes[this.g-1].question.id,
 					quiz_id: this.quizId,
 				}
-			);
-			this.answersForm.text = "";
-			this.i++;
+				);
+				this.monQuiz.setItem('quiz', JSON.stringify(this.quizzes));
+				console.log(this.quizzes[this.g-1]);
+				this.answersForm.text = "";
+				this.i++;
+				this.monQuiz.setItem('i', JSON.stringify(this.i));
 		},
 		delAnsers(ansI, questionI) {
 			this.quizzes[questionI].reponses.splice(ansI, 1);
@@ -131,6 +155,20 @@ export default {
 		//  },
 
 	},
+	beforeMount(){
+		if (this.monQuiz.getItem('quiz')) {
+			this.quizzes = JSON.parse(this.monQuiz.getItem('quiz'));
+			this.quizForm.id = JSON.parse(this.monQuiz.getItem('id'));
+			this.quizForm.title = JSON.parse(this.monQuiz.getItem('title'));
+			this.quizForm.type = JSON.parse(this.monQuiz.getItem('type'));
+			this.quizForm.visibility = JSON.parse(this.monQuiz.getItem('visibility'));
+			this.quizForm.duration = JSON.parse(this.monQuiz.getItem('duration'));
+			this.quizForm.description = JSON.parse(this.monQuiz.getItem('description'));
+			this.i = JSON.parse(this.monQuiz.getItem('i'));
+			this.g = JSON.parse(this.monQuiz.getItem('g'));
+			console.log(this.quizzes);
+		}
+	}
 }
 
 </script>
@@ -155,7 +193,7 @@ export default {
 					<option value="Individuel">Individuel</option>
 				</select>
 
-				<select id="quiz" name="quiz" class="my-2 rounded-lg w-96">
+				<select id="quiz" name="quiz" class="my-2 rounded-lg w-96" v-model="quizForm.duration">
 					<option value="type1" selected>Time Quizz</option>
 					<option value="10">10 mins</option>
 					<option value="20">20 mins</option>

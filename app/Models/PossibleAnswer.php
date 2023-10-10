@@ -9,8 +9,11 @@ class PossibleAnswer extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'text',
         'state',
+        'quiz_id',
+        'question_id'
     ];
 
     public function question()

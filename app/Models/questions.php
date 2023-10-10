@@ -11,8 +11,10 @@ class questions extends Model
 
     use HasFactory;
     protected $fillable = [
+        'id',
         'text',
         'image',
+        'quiz_id',
     ];
     public function quiz()
     {
