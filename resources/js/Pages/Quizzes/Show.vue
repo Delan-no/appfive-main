@@ -15,9 +15,7 @@
   </AppLayout>
 </template> -->
 <script>
-import AppLayout from "@/Layouts/AppLayout.vue";
 import { useForm, Head } from '@inertiajs/vue3';
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 export default {
     props: {
         'quiz': Object,
@@ -60,12 +58,9 @@ export default {
  
 <template >
 
-    <AppLayout title="Quizz">
-        <template #header>
             <h1 class="font-semibold text-gray-900 leading-tight text-5xl flex justify-center animate-bounce h-6 ">
                 Quizz
             </h1>
-        </template>
 
 
         <div class=" flex justify-center mt-24">
@@ -103,7 +98,6 @@ export default {
                     </button>
 
 
-                    <InputError :message="form.errors.message" class="mt-2" />
                 </form>
             </div>
 
@@ -128,7 +122,6 @@ export default {
                         class="border-double border-4  text-2xl px-8 hover:bg-orange-500 bg-orange-400 rounded-full border-white-950 text-white my-2 ml-28  hover:italic">Valider
                     </button>
 
-                    <InputError :message="form.errors.message" class="mt-2" />
                 </form>
             </div>
 
@@ -145,5 +138,4 @@ export default {
             </form>
         </div>
 
-    </AppLayout>
 </template>
