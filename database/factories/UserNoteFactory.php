@@ -3,15 +3,15 @@
 namespace Database\Factories;
 
 use App\Models\quiz;
-use App\Models\Interne_user;
-use App\Models\Externe_user;
+use App\Models\InterneUser;
+use App\Models\ExterneUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class user_noteFactory extends Factory
+class UserNoteFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -24,13 +24,13 @@ class user_noteFactory extends Factory
             'id' => $this->faker->numberBetween(36),
             'note' => $this->faker->randomNumber(2),
             'interne_user_id' =>    function (){
-                return Interne_user::inRandomOrder()->first()->id;
+                return InterneUser::inRandomOrder()->first()->id;
             },
             'externe_user_id' =>    function (){
-                return Externe_user::inRandomOrder()->first()->id;
+                return ExterneUser::inRandomOrder()->first()->id;
             },
             'quiz_id' =>    function (){
-                return quiz::inRandomOrder()->first()->id;
+                return Quiz::inRandomOrder()->first()->id;
             },
         ];
     }
