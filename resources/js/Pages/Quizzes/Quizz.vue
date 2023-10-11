@@ -1,33 +1,46 @@
 <script setup>
+import { ref } from 'vue';
+
 defineProps(['quizz']);
+
+let show = ref(false);
+let hidden = ref(true);
+
+let toggle = () => {
+    show.value = !show.value;
+    hidden.value = !hidden.value;
+}
+
 </script>
 
 <template>
     <div
-        class="hover:bg-gray-200 group flex rounded-3xl border-solid  bg-gray-100 border-amber-400 text-gray-800 text-xl font-medium pl-2 pr-3 py-2 shadow-sm">
+        class="hover:bg-gray-200 group flex rounded-3xl border-solid  bg-gray-100 border-amber-400 text-gray-800 text-xl font-medium pl-2 pr-3 py-2 shadow-sm ">
         <div>
-            <div class="flex justify-between">
+            <div class="flex justify-between sticky top-0">
                 <div class="h-7 w-30  bg-yellow-300 flex items-center justify-center rounded-xl">
                     <div class="text-center pl-1.5 pr-1.5">{{ quizz.type }}</div>
                 </div>
                 <div>
-                    <button class="ml-3.5" @click="affiche">
+                    <transition>
+                        <button class="ml-3.5 relative" @click="toggle">
+                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1" :class="{opacity : hidden === true}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                    class="bi bi-toggle-off" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11 4a4 4 0 0 1 0 8H8a4.992 4.992 0 0 0 2-4 4.992 4.992 0 0 0-2-4h3zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5z" />
+                                </svg>
+                            </span>
+                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1" :class="{opacity : show === true}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                    class="bi bi-toggle-on red-600" viewBox="0 0 16 16">
+                                    <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
+                                </svg>
+                            </span>
+                        </button>
+                    </transition>
 
-                        <span v-if="affiche">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                class="bi bi-toggle-off" viewBox="0 0 16 16">
-                                <path
-                                    d="M11 4a4 4 0 0 1 0 8H8a4.992 4.992 0 0 0 2-4 4.992 4.992 0 0 0-2-4h3zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5z" />
-                            </svg>
-                        </span>
 
-                        <span v-else>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                class="bi bi-toggle-on red-600" viewBox="0 0 16 16">
-                                <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
-                            </svg>
-                        </span>
-                    </button>
                     <button class="ml-3.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#84cc16"
                             class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -91,35 +104,25 @@ defineProps(['quizz']);
 
             </div>
 
-
-            <h2 class="mt-6 ml-1 font-medium text-gray-00 font-semibold">{{ quizz.title }}</h2>
-
-            <p class="mt-4 text-sm ml-1 leading-relaxed">
-                {{ quizz.description }}
-            </p>
+            <div class=" overflow-y-auto h-40 ">
+                <h2 class="mt-6 ml-1 font-medium text-gray-00 font-semibold">{{ quizz.title }}</h2>
+                <p class="mt-4 text-sm ml-1 leading-relaxed static">
+                    {{ quizz.description }}
+                </p>
+            </div>
         </div>
 
     </div>
 </template>
 
-<script>
-import { Link } from '@inertiajs/vue3';
-import Icon from '../../Shared/Icon.vue';
-import Dropdown from '../../Shared/Dropdown.vue';
-import { ref } from 'vue';
 
-
-export default {
-    components: {
-        Dropdown,
-        Link,
-        Icon,
-    },
-    props: {
-        auth: Object,
+<style>
+    .opacity {
+        opacity: 1 !important;
     }
-}
+</style>
 
-let affiche = ref(true);
-const awesome = true;
-</script>
+
+
+
+
