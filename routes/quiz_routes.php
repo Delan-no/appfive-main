@@ -12,4 +12,4 @@ Route::middleware([
 ])->group(function () {
 });
 Route::resource('quizzes', QuizzesController::class);
-Route::resource('questions', QuestionsController::class)->only('index', 'store');
+Route::resource('questions', QuestionsController::class)->only('index', 'store', 'update');
