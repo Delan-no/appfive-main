@@ -68,7 +68,16 @@ class QuizzesController extends Controller
 	 */
 	public function update(Request $request, quiz $quizzes)
 	{
-		//
+		$this->authorize('update', $quizzes);
+
+		$validated = $request->validate([
+			'visibilty' => 'required|boolean'
+		]);
+
+		$quizzes->update($validated);
+		dd($quizzes);
+
+		return redirect(route('quizzes.index'));
 	}
 
 	/**

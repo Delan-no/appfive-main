@@ -11,12 +11,13 @@ const searchValue = ref('');
 // Fonction pour filtrer les quizzes
 function filterQuizzes() {
 	quizzes.value = props.quizzes.filter((quiz) =>
-	quiz.type.toLowerCase().includes(searchValue.value.toLocaleLowerCase()));
+	quiz.title.toLowerCase().includes(searchValue.value.toLocaleLowerCase()));
 }
 
 watch(searchValue, () => {
 	filterQuizzes();
 });
+
 </script>
 
 <template>
@@ -34,7 +35,7 @@ watch(searchValue, () => {
 							<div class="flex items-center justify-between">
 								<h2 class="font-semibold text-slate-900">Quizzes</h2>
 								<a href="/new"
-									class="hover:bg-amber-400 group flex items-center rounded-md bg-yellow-800 text-slate-900 font-semibold text-sm font-medium pl-2 pr-3 py-2 shadow-sm">
+									class="hover:bg-yellow-600 group flex items-center rounded-md bg-yellow-800 text-slate-900 font-semibold text-sm font-medium pl-2 pr-3 py-2 shadow-sm">
 									<svg width="20" height="20" fill="currentColor" class="mr-2" aria-hidden="true">
 										<path
 											d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
@@ -56,7 +57,8 @@ watch(searchValue, () => {
 						</header>
 						<div class="mt-16 rounded-lg p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 text-sm leading-6">
 							<div class="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
-								<Quizz v-for="quiz 	 in quizzes" :key="quiz.id" :quizz='quiz' />
+								<Quizz v-for="quiz in quizzes" :key="quiz.id" :quizz='quiz'
+							 />
 							</div>
 							<div class="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8" v-if="quizzes.length === 0">
 								No Quizzes found.
@@ -64,7 +66,7 @@ watch(searchValue, () => {
 							</div>
 						</div>
 						<a :href="route('quizzes.create')"
-							class="hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium py-3">
+							class="hover:border-yellow-800 hover:border-solid hover:bg-yellow-600 hover:text-blue-500 group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium py-3">
 							<svg class="group-hover:text-blue-500 mb-1 text-slate-400" width="20" height="20" fill="currentColor"
 								aria-hidden="true">
 								<path
