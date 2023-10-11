@@ -14,13 +14,8 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        // $quiz = quizzes::with(['questions','possible_answer'])->get();
-        $quiz = quiz::with('question')->with('possible_answer', function ($query) {
-            $query->with('question');
-        })->findOrFail(281632778);
-        // dd($quiz);
         return Inertia::render('Questions/Index', [
-            'quiz' => $quiz,
+            'quizzes' => quiz::where('visibility', 1)->get()
         ]);
     }
 
@@ -52,9 +47,17 @@ class QuestionsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(questions $questions)
+    public function show(quiz $quiz)
     {
-
+        // $quiz = quiz::with(['question','possible_answer'])->get();
+        $quiz = quiz::with('question')->with('possible_answer', function ($query) {
+            $query->with('question');
+        })->findOrFail(866263337);
+        
+        // dd($quiz);
+        return Inertia::render('Questions/Show', [
+            'quiz' => $quiz,
+        ]);
     }
 
     /**
@@ -80,4 +83,5 @@ class QuestionsController extends Controller
     {
         //
     }
+
 }
