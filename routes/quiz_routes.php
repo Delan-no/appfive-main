@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserAnswerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuizzesController;
 use App\Http\Controllers\QuestionsController;
@@ -12,4 +13,6 @@ Route::middleware([
 ])->group(function () {
 });
 Route::resource('quizzes', QuizzesController::class);
-Route::resource('questions', QuestionsController::class)->only('index', 'store');
+Route::get('quiz', [QuizzesController::class, 'indexQuiz'])->name('quiz');
+Route::resource('useranswer', UserAnswerController::class);
+// Route::resource('questions', QuestionsController::class)->only('index', 'store');

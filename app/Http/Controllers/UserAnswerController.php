@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\user_answer;
+use App\Models\UserAnswer;
 use Illuminate\Http\Request;
 
 class UserAnswerController extends Controller
@@ -28,13 +28,31 @@ class UserAnswerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
+        $request->validate([
+            'interne_user_id' => 'integer' ,
+            'externe_user_id' => 'integer',
+            'quiz_id' => 'required|integer',
+            'possible_answer_id' => 'required|integer',
+            'question_id' => 'required|integer',
+        ]);
+        $interne_user_id = 1;
+        $answer = new UserAnswer;
+        $answer->interne_user_id = $interne_user_id;
+        $answer->externe_user_id = null;
+        $answer->quiz_id = $request->quiz_id;
+        $answer->possible_answer_id = $request->input('possible_answer_id');
+        $answer->question_id = $request->$request->question_id;
+        // $answer->question_id = $request->input('questions_id');
+        $answer->save();
+       
+        return redirect()->route('/')->with('Vous venez de soumettre vos réponses');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(user_answer $user_answer)
+    public function show(UserAnswer $UserAnswer)
     {
         //
     }
@@ -42,7 +60,7 @@ class UserAnswerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(user_answer $user_answer)
+    public function edit(UserAnswer $UserAnswer)
     {
         //
     }
@@ -50,7 +68,7 @@ class UserAnswerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, user_answer $user_answer)
+    public function update(Request $request, UserAnswer $UserAnswer)
     {
         //
     }
@@ -58,7 +76,7 @@ class UserAnswerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(user_answer $user_answer)
+    public function destroy(UserAnswer $UserAnswer)
     {
         //
     }

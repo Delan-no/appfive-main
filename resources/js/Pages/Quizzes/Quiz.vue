@@ -77,11 +77,6 @@ export default {
 			this.quizForm.post('/quizzes');
 			
 		},
-		storePossibleAns() {
-			this.questionForm.post('/questions');
-			this.questionForm.text = '';
-			this.questionForm.type = '';
-		},
 		addAns() {
 			maMémoire.setItem('')
 			let w

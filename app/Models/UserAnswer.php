@@ -9,7 +9,21 @@ class UserAnswer extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'quiz_id',
+        'possible_answer_id',
+        'question_id',
+    ];
+
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
     public function possible_answer()
     {
         return $this->belongsTo(possible_answer::class);

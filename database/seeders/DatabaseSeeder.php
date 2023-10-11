@@ -35,22 +35,22 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        Applicant::factory(10)->create();
-        TestStep::factory(4)->create();
-        Folder::factory(10)->create();
-        InterneUser::factory()->count(5)->create();
-        Role::factory()->count(5)->create();
-        InterneUsersRole::factory()->count(5)->create();
-        TestStep::factory()->count(5)->create();
-        StepSection::factory(8)->create();
-        Assessment::factory(10)->create();
-        Session::factory()->count(5)->create();
-        Rating::factory(10)->create();
-        ExterneUser::factory()->count(5)->create();
+        // Applicant::factory(10)->create();
+        // TestStep::factory(4)->create();
+        // Folder::factory(10)->create();
+        // InterneUser::factory()->count(5)->create();
+        // Role::factory()->count(5)->create();
+        // InterneUsersRole::factory()->count(5)->create();
+        // TestStep::factory()->count(5)->create();
+        // StepSection::factory(8)->create();
+        // Assessment::factory(10)->create();
+        // Session::factory()->count(5)->create();
+        // Rating::factory(10)->create();
+        // ExterneUser::factory()->count(5)->create();
         Quiz::factory(5)->create();
-        questions::factory(100)->create();
-        PossibleAnswer::factory(10)->create();
-        UserAnswer::factory(10)->create();
-        UserNote::factory(10)->create();
+        // questions::factory(100)->create();
+        // PossibleAnswer::factory(10)->create();
+        // UserAnswer::factory(10)->create();
+        // UserNote::factory(10)->create();
     }
 }

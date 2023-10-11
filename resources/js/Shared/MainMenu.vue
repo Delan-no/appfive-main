@@ -21,7 +21,7 @@
       </Link>
     </div>
     <div class="mb-4">
-      <Link class="group flex items-center py-3" :href="route('questions.index')">
+      <Link class="group flex items-center py-3" :href="route('quiz')">
       <Icon name="dashboard" class="mr-2 w-4 h-4"
         :class="isUrl('quiz') ? 'fill-white' : 'fill-yellow-400 group-hover:fill-white'" />
       <div

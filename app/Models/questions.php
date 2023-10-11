@@ -16,11 +16,19 @@ class questions extends Model
         'image',
         'quiz_id',
     ];
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
     public function quiz()
     {
         return $this->belongsTo(quiz::class);
     }
-    public function possible_answer(){
-        return $this->hasMany(possible_answer::class);
+    public function possibleAnswer(){
+        return $this->hasMany(PossibleAnswer::class);
     }
 }

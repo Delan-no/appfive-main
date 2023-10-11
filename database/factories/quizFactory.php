@@ -21,12 +21,12 @@ class quizFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => $this->faker->numberBetween(36),
+            'id' => $this->faker->uuid(),
             'type' => $this->faker->word(),
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->sentence(20),
             'duration' => $this->faker->numberBetween(2),
-            'visibility' => $this->faker->boolean(),
+            'visibility' => true,
             'interne_user_id' =>    function (){
                 return InterneUser::inRandomOrder()->first()->id;
             },

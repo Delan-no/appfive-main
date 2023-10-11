@@ -12,6 +12,16 @@ class UserNote extends Model
     protected $fillable = [
         'note',
      ];
+
+     protected $keyType = 'string';
+
+     /**
+      * Indicates if the IDs are auto-incrementing.
+      *
+      * @var bool
+      */
+     public $incrementing = false;
+
      public function user()
      {
          return $this->belongsTo(User::class);

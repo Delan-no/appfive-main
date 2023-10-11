@@ -19,15 +19,22 @@ class quiz extends Model
         'interne_user_id',
         
     ];
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function possible_answer()
-    {
-        return $this->hasMany(possible_answer::class);
+    public function possibleAnswer(){
+        return $this->hasMany(PossibleAnswer::class);
     }
 
     public function question()

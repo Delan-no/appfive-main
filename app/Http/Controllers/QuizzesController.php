@@ -29,6 +29,13 @@ class QuizzesController extends Controller
 		return Inertia::render('Quizzes/Quiz');
 	}
 
+	public function indexQuiz(){
+		$quizzes = quiz::where('visibility', 1)->get();
+		// dd($quizzes);
+		return Inertia::render('Questions/Index', [
+            'quizzes' => $quizzes,
+        ]);
+	}
 	/**
 	 * Store a newly created resource in storage.
 	 */
@@ -83,10 +90,14 @@ class QuizzesController extends Controller
 	/**
 	 * Display the specified resource.
 	 */
-	public function show(quiz $quizzes)
+	public function show(quiz $quiz)
 	{
-		$quiz = quiz::where('id', $quizzes->id)->get();
-		return Inertia::render('Quizzes/Show', [
+		// $quiz = quiz::where('id', $quizzes->id)->get();
+		// dd($quiz);
+		$quiz = quiz::with('question')->with('possibleAnswer', function ($query) {
+			$query->with('question');
+        })->findOrFail($quiz->id);
+		return Inertia::render('Questions/Show', [
 			'quiz' => $quiz,
 		]);
 
@@ -97,7 +108,7 @@ class QuizzesController extends Controller
 	 */
 	public function edit(quiz $quizzes)
 	{
-		//    
+		dd($quizzes);
 	}
 
 	/**
