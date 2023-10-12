@@ -17,7 +17,7 @@ class QuestionsController extends Controller
         // $quiz = quizzes::with(['questions','possible_answer'])->get();
         $quiz = quiz::with('question')->with('possible_answer', function ($query) {
             $query->with('question');
-        })->findOrFail(281632778);
+        })->findOrFail(866263337);
         // dd($quiz);
         return Inertia::render('Questions/Index', [
             'quiz' => $quiz,

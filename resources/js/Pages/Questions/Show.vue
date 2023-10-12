@@ -13,6 +13,12 @@ export default {
 			prevActif: ref(true),
 			nextActif: ref(false),
 			submitActif: ref(true),
+
+			selectedInput: " ", // initialisation du variable à null
+			reponse_soumis: [], // tableau prenant le choix de l'utilisateur
+
+			selectedChoices: [],
+			answersStocker: localStorage,
 			nbr: ref(0),
 			state: ref({
 				min: this.duration - 1,
@@ -20,20 +26,19 @@ export default {
 				cent: 99,
 				intervalID: "",
 			}),
-			allAnswers : this.$inertia.form({
-				answers : [],
+			allAnswers: this.$inertia.form({
+				answers: [],
 			}),
-			userAnswer : this.$inertia.form({
-				'id' : uuid(),
-				'possible_answer_id' : '',
-				'question_id' :'' ,
-				'quiz_id' :this.quiz.id , 
+			userAnswer: this.$inertia.form({
+				'id': uuid(),
+				'possible_answer_id': '',
+				'question_id': '',
+				'quiz_id': this.quiz.id,
 			}),
-			
-
 		}
 	},
 	methods: {
+		/* Fonction du Timer */
 		startQuizz() {
 			this.state.intervalID = setInterval(() => {
 				if (this.state.min > -1) {
@@ -53,8 +58,10 @@ export default {
 				}
 			}, 10);
 		},
+		/* Fonction Question suivante */
 		next(tableau) {
 			this.nbr = this.nbr + 1;
+			// this.selectedInput = null; // rappel de la variable null
 			if (this.nbr >= 1) {
 				this.prevActif = false
 			}
@@ -63,8 +70,10 @@ export default {
 				this.submitActif = false
 			}
 		},
+		/* Fonction Question précédente */
 		preview(tableau) {
 			this.nbr = this.nbr - 1;
+			// this.selectedInput = null; // rappel de la variable null
 			if (this.nbr < 1) {
 				this.prevActif = true
 			}
@@ -80,8 +89,42 @@ export default {
 				return number;
 			}
 		},
+		addAnswers(possible_answer, i, question, name) {
+			var radios = document.getElementsByName('name');
+			for (var i = 0; i < radios.length; i++) {
+				if (radios[i].value !== this.nomDuModele) {
+					radios[i].checked = false;
+				}
+			}
+			this.selectedChoices[i] = {
+				'id': this.userAnswer.id,
+				'possible_answer': possible_answer.id,
+				'question_id': question.id,
+				'quiz_id': this.userAnswer.quiz_id,
+			}
+			this.userAnswer.id = uuid();
+			console.log(this.selectedChoices);
+			this.answersStocker.setItem('userAns', JSON.stringify(this.userAnswer))
+			this.answersStocker.setItem('id', JSON.stringify(this.selectedChoices[i].id));
+			this.answersStocker.setItem('possible_answer_id', JSON.stringify(this.selectedChoices[i].possible_answer));
+			this.answersStocker.setItem('question_id', JSON.stringify(this.selectedChoices[i].question_id));
+			this.answersStocker.setItem('quiz_id', JSON.stringify(this.selectedChoices[i].quiz_id));
+						
+			console.log(this.answersStocker);
+
+
+
+			// for (let i = 0; i < this.questions.length; i++) {
+			// 	this.reponse_soumis.push(possible_answer.id[i])				
+			// }
+			// console.log(this.reponse_soumis);
+			// console.log(this.questions.length);
+			// console.log(possible_answer.id);
+		},
 		soumettre() {
-			
+
+		},
+		beforeMount() {
 		}
 	}
 }
@@ -104,7 +147,7 @@ export default {
 			<div>
 				<div class="flex justify-between font-bold text-2xl border-b-4 border-gray-800">
 					<p class="">{{ quiz.title }}</p>
-					<p>{{ doubleNum(state.min) }} : {{ doubleNum(state.secondes) }} : {{ oubleNum(state.cent) }}</p>
+					<p>{{ doubleNum(state.min) }} : {{ doubleNum(state.secondes) }} : {{ doubleNum(state.cent) }}</p>
 				</div>
 
 				<div class="container mx-auto max-w-3xl mt-6">
@@ -115,16 +158,15 @@ export default {
 						<form @submit.prevent="store()">
 							{{ questions[nbr].text }}
 							<div>
-								<ol v-for="possible_answer, i in questions[nbr].possible_answers" :key="i">
-									<input type="radio" name="prop_answ">
-									<label id="reponse">{{ possible_answer.text }}</label>
-									{{ console.log(possible_answer.id) }}
-								</ol>
+								<ul v-for="possible_answer, i in questions[nbr].possible_answers" :key="i">
+									<input type="radio" v-model="selectedInput" name="prop_ans" :id="possible_answer.id" @change="addAnswers(possible_answer, nbr, questions[nbr])">
+									<label :for="possible_answer.id">{{ possible_answer.text }}</label>
+								</ul>
 							</div>
 							<button @click.prevent="preview(quiz.question.length)" :class="{ hidden: prevActif }">
 								Précédent
 							</button>
-							<button @click.prevent="next(quiz.question.length)" :class="{ hidden: nextActif }">
+							<button @click.prevent="next(quiz.question.length);" :class="{ hidden: nextActif }">
 								Suivant
 							</button>
 							<button @click.prevent="soumettre()" :class="{ hidden: submitActif }">

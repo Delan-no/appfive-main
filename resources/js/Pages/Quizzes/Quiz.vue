@@ -218,7 +218,7 @@ export default {
 	</div>
 	<div id="div" v-for="(quiz, u) of quizzes" :key="u">
 		<p>
-			{{ quiz.question.text }}
+			<span class="lepoint">.</span> {{  quiz.question.text }}
 		</p>
 		<ul>
 			<li v-for="(anser, i) of quizzes[u].reponses" :key="i">
@@ -239,16 +239,8 @@ export default {
 	</div>
 	<button @click="store">Soumettre</button>
 </template>
-
-
-
 <style>
-button {
-	/* border: 1px solid red; */
-	margin-left: 1rem;
-}
-
-.bi-trash {
-	color: red;
-}
+	.lepoint{
+		font-size: 5rem;
+	}
 </style>
