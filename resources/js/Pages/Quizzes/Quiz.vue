@@ -32,8 +32,8 @@ export default {
 				type: '',
 				visibility: false,
 				duration: 0,
-				questions:[],
-				possibleAnswers:[],
+				questions: [],
+				possibleAnswers: [],
 			}),
 			questionForm: this.$inertia.form({
 				id: this.questionId,
@@ -59,6 +59,10 @@ export default {
 			nbrAnser: '',
 			showQuestion: false,
 			g: 0,
+
+			// Assignation de valeurs * Délanno *
+			disable: false,
+			enable: true,
 		}
 	},
 	methods: {
@@ -72,7 +76,7 @@ export default {
 			}
 			this.monQuiz.clear();
 			this.quizForm.post('/quizzes');
-			
+
 		},
 		addAns() {
 			maMémoire.setItem('')
@@ -81,7 +85,13 @@ export default {
 		destroy(chirp) {
 			this.$inertia.delete(`/chirps/${chirp.id}`)
 		},
+
 		addQuestion() {
+
+			// Désactivation du button valider de la question à entrer * Délanno *
+			this.enable = !this.enable;
+
+			
 			console.log(this.quizForm.id);
 			this.i = 0;
 			this.int = 0;
@@ -111,6 +121,7 @@ export default {
 			this.g++
 			this.monQuiz.setItem('g', JSON.stringify(this.g));
 			this.questionId = uuid();
+			this.disable = !this.disable;
 		},
 		addAnsers() {
 			this.answerId = uuid();
@@ -119,15 +130,29 @@ export default {
 					id: this.answerId,
 					text: this.answersForm.text,
 					etat: this.answersForm.etat,
-					question_id: this.quizzes[this.g-1].question.id,
+					question_id: this.quizzes[this.g - 1].question.id,
 					quiz_id: this.quizId,
 				}
-				);
-				this.monQuiz.setItem('quiz', JSON.stringify(this.quizzes));
-				console.log(this.quizzes[this.g-1]);
-				this.answersForm.text = "";
-				this.i++;
-				this.monQuiz.setItem('i', JSON.stringify(this.i));
+			);
+
+			//  Activation du button valider lorsqu'il y a au moins deux propositions de reponses 
+			if (this.quizzes[this.g - 1].reponses.length >= 2) {
+				this.disable = !this.disable;
+				// console.log("this.disable")
+				// console.log(this.disable)
+			}
+			if (this.quizzes[this.g - 1 ].reponses.length >= 4) {
+				this.enable = true;
+			}
+
+			// Fin du code
+
+
+			this.monQuiz.setItem('quiz', JSON.stringify(this.quizzes));
+			console.log(this.quizzes[this.g - 1]);
+			this.answersForm.text = "";
+			this.i++;
+			this.monQuiz.setItem('i', JSON.stringify(this.i));
 		},
 		delAnsers(ansI, questionI) {
 			this.quizzes[questionI].reponses.splice(ansI, 1);
@@ -147,7 +172,7 @@ export default {
 		//  },
 
 	},
-	beforeMount(){
+	beforeMount() {
 		if (this.monQuiz.getItem('quiz')) {
 			this.quizzes = JSON.parse(this.monQuiz.getItem('quiz'));
 			this.quizForm.id = JSON.parse(this.monQuiz.getItem('id'));
@@ -160,54 +185,54 @@ export default {
 			this.g = JSON.parse(this.monQuiz.getItem('g'));
 			console.log(this.quizzes);
 		}
-	}
+	},
+
+
 }
 
 </script>
 <template >
-
 	<h1 class="font-semibold text-gray-900 leading-tight text-5xl flex justify-center animate-bounce h-6 ">
 		Quizz
 	</h1>
-	 <div class="mr-28">
-			<form @submit.prevent="addQuiz"
-				class="grid justify-items-start mt-6">
+	<div class="mr-28">
+		<form @submit.prevent="addQuiz" class="grid justify-items-start mt-6">
+			<select id="quiz" name="quiz" class="rounded-lg border-4 w-96" v-model="quizForm.type">
+				<option value="type1" disabled selected >Type de quiz</option>
+				<option value="Général">Général</option>
+				<option value="Collectif">Collectif</option>
+				<option value="Psychotechnique">Psychotechnique</option>
+				<option value="Individuel">Individuel</option>
+			</select>
 
-				<input type="text" placeholder="Titre Quizz" class="rounded-lg w-96" v-model="quizForm.title">
+			<input type="text" placeholder="Titre Quizz" class="rounded-lg border-4 w-96" v-model="quizForm.title">
 
-				<input type="text" placeholder="Description Quizz" class="my-2 rounded-lg w-96" v-model="quizForm.description">
+			<input type="text" placeholder="Description Quizz" class="my-2 rounded-lg border-4 w-96"
+				v-model="quizForm.description">
 
-				<select id="quiz" name="quiz" class="rounded-lg w-96" v-model="quizForm.type">
-					<option value="type1" selected>type de quiz</option>
-					<option value="Général">Général</option>
-					<option value="Collectif">Collectif</option>
-					<option value="Psychotechnique">Psychotechnique</option>
-					<option value="Individuel">Individuel</option>
-				</select>
 
-				<select id="quiz" name="quiz" class="my-2 rounded-lg w-96" v-model="quizForm.duration">
-					<option value="type1" selected>Time Quizz</option>
-					<option value="10">10 mins</option>
-					<option value="20">20 mins</option>
-					<option value="30">30 mins</option>
-					<option value="40">40 mins</option>
-					<option value="50">50 mins</option>
-					<option value="60">60 mins</option>
-				</select>
+			<select id="quiz" name="quiz" class="my-2 rounded-lg border-4 w-96" v-model="quizForm.duration">
+				<option value="type1" disabled selected>Time Quizz</option>
+				<option value="10">10 mins</option>
+				<option value="20">20 mins</option>
+				<option value="30">30 mins</option>
+				<option value="40">40 mins</option>
+				<option value="50">50 mins</option>
+				<option value="60">60 mins</option>
+			</select>
 
-				<button type="submit"
-					class="border-double border-4  text-2xl px-8 hover:bg-orange-500 bg-orange-400 rounded-full border-white-950 text-white text-center ml-28 Dl@  hover:italic"
-					>Valider
-				</button>
+			<button type="submit"
+				class="border-double border-4  text-2xl px-8 hover:bg-orange-500 bg-orange-400 rounded-full border-white-950 text-white text-center ml-28 Dl@">Valider
+			</button>
 
-			</form>
-		</div> 
-	<div class=" flex justify-center mt-24">
+		</form>
+	</div>
+	<div class=" flex justify-center mt-24 ">
 		<div class="ml-28">
-			<form @submit.prevent="addQuestion" class=" @wl grid justify-items-start mt-6">
+			<form @submit.prevent="addQuestion" class="  @wl grid justify-items-start mt-6">
 
-				<select id="quiz" name="quiz" class="rounded-lg w-96" v-model="questionForm.type">
-					<option value="type1" selected>Type de Question</option>
+				<select id="quiz" name="quiz" class=" rounded-lg border-4 w-96" v-model="questionForm.type">
+					<option value="Type de Question" disabled selected class="my-text">Type de Question</option>
 					<option value="type2">Quizz2</option>
 					<option value="type3">Quizz3</option>
 					<option value="type4">Quizz4</option>
@@ -215,9 +240,9 @@ export default {
 				</select>
 				<!-- <input type="file" placeholder="images quiz" class="my-2 rounded-lg w-96"> -->
 
-				<input type="text" placeholder="Textes" class="my-2 rounded-lg w-96" v-model="questionForm.text">
-				<button type="submit"
-					class="border-double border-4  text-2xl px-8 hover:bg-orange-500 bg-orange-400 rounded-full border-white-950 text-white my-2 ml-28  hover:italic">Valider
+				<input type="text" placeholder="Textes" class="my-2 rounded-lg border-4 w-96" v-model="questionForm.text">
+				<button type="submit" :disabled="disable"
+					class="border-double border-4  text-2xl px-8 hover:bg-orange-500 bg-orange-400 rounded-full border-white-950 text-white my-2 ml-28 ">Valider
 				</button>
 
 			</form>
@@ -228,10 +253,11 @@ export default {
 	<div class="flex justify-center  mt-24">
 		<form @submit.prevent="addAnsers" class=" ">
 
-			<div><input type="text" placeholder="Reponses" class="rounded-lg w-96" v-model="answersForm.text"></div>
+			<div><input type="text" placeholder="Reponses" class="rounded-lg border-4 w-96" v-model="answersForm.text">
+			</div>
 
 			<button type="submit"
-				class="border-double border-4  text-2xl px-8 hover:bg-orange-500 bg-orange-400 rounded-full border-white-950 text-white my-2 ml-28  hover:italic">Valider
+				class="border-double border-4  text-2xl px-8 hover:bg-orange-500 bg-orange-400 rounded-full border-white-950 text-white my-2 ml-28  " :disabled="enable">Valider
 			</button>
 		</form>
 	</div>
@@ -241,9 +267,9 @@ export default {
 		</p>
 		<ul>
 			<li v-for="(anser, i) of quizzes[u].reponses" :key="i">
-				<span>{{ i+ 1 }} - </span>
+				<span>{{ i + 1 }} - </span>
 				<input type="radio" :name="u" @change="truer(quizzes[u], i)">
-				<span> {{ anser.text}} </span>
+				<span> {{ anser.text }} </span>
 				<button @click="delAnsers(i, u)">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
 						viewBox="0 0 16 16">
@@ -258,3 +284,9 @@ export default {
 	</div>
 	<button @click="store">Soumettre</button>
 </template>
+
+<style>
+.my-text{
+	color: blue;
+}
+</style>
