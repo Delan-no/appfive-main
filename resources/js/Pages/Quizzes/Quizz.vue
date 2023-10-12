@@ -1,7 +1,7 @@
 <script setup>
+import { useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
-defineProps(['quizz']);
 
 let show = ref(false);
 let hidden = ref(true);
@@ -10,7 +10,26 @@ let toggle = () => {
     show.value = !show.value;
     hidden.value = !hidden.value;
 }
+const props = defineProps(['quizz']);
 
+
+
+const form = useForm({
+    visibility: props.quizz.visibility,
+})
+
+// let active = ref(true);
+
+function showVisibility(quizz) {
+
+    router.patch(`/quizzes/${quizz.id}`, { visibility: true }, quizz.id);
+
+}
+function hideVisibility(quizz) {
+
+    router.patch(`/quizzes/${quizz.id}`, { visibility: false }, quizz.id);
+
+}
 </script>
 
 <template>
@@ -23,15 +42,18 @@ let toggle = () => {
                 </div>
                 <div>
                     <transition>
-                        <button class="ml-3.5 relative" @click="toggle">
-                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1" :class="{opacity : hidden === true}">
+                        <button class="ml-3.5 relative" @click="toggle(); showVisibility(quizz)">
+                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1"
+                                :class="{ opacity: hidden === true }">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                     class="bi bi-toggle-off" viewBox="0 0 16 16">
                                     <path
                                         d="M11 4a4 4 0 0 1 0 8H8a4.992 4.992 0 0 0 2-4 4.992 4.992 0 0 0-2-4h3zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5z" />
                                 </svg>
                             </span>
-                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1" :class="{opacity : show === true}">
+                 
+                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1"
+                                :class="{ opacity: show === true }">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                     class="bi bi-toggle-on red-600" viewBox="0 0 16 16">
                                     <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
@@ -68,18 +90,38 @@ let toggle = () => {
         </div>
 
     </div>
+    <!-- <div v-if="quizz.visibility === 0">
+        <div class="absolute right-3 bottom-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-square bg-red-500" viewBox="0 0 16 16">
+                <path
+                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+            </svg>
+        </div>
+    </div>
+    <div v-if="quizz.visibility === 1">
+        <div class="absolute right-3 bottom-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-square bg-green-500" viewBox="0 0 16 16">
+                <path
+                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+            </svg>
+        </div> -->
+    <!-- </div> -->
 </template>
 
 
 <style>
-    .opacity {
-        opacity: 1 !important;
-    }
-    .description::-webkit-scrollbar{
+.opacity {
+    opacity: 1 !important;
+}
+
+.description::-webkit-scrollbar {
     margin-left: 5px;
     width: 5px;
 }
-.description::-webkit-scrollbar-thumb{
+
+.description::-webkit-scrollbar-thumb {
     border-radius: 50px;
     height: 20px;
     background-color: rgba(0, 0, 0, 0.2);

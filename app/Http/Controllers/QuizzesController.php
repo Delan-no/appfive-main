@@ -92,13 +92,35 @@ class QuizzesController extends Controller
 	 */
 	public function show(quiz $quiz)
 	{
-		// $quiz = quiz::where('id', $quizzes->id)->get();
-		// dd($quiz);
-		$quiz = quiz::with('question')->with('possibleAnswer', function ($query) {
+		$tab = quiz::with('question')->with('possibleAnswer', function ($query) {
 			$query->with('question');
-        })->findOrFail($quiz->id);
+		})->findOrFail($quiz->id);
+		// chnger() {
+		// 	for (let i = 0; i < this.tab.question.length; i++) {
+		// 		this.quizReal.push(this.tab.question[i]);
+		// 		for (let u = 0; u < this.tab.possible_answer.length; u++) {
+		// 			this.quizReal[i].possible_answers = this.tab.possible_answer.filter(el => el.question_id == this.quizReal[i].id)
+		// 		}
+		// 	}
+		// 	return this.quizReal;
+		// }
+		$quizzes = [];
+		for ($i=0; $i < count($tab->question); $i++) {
+			array_push($quizzes, $tab[$i]->question);
+			for ($u=0; $u < count(); $u++) { 
+				$quizzes[$u]->possible_answers = array_filter();
+			}
+		}
+
+
+
+
+
+
+
+
 		return Inertia::render('Questions/Show', [
-			'quiz' => $quiz,
+			// 'quiz' => 
 		]);
 
 	}
@@ -114,9 +136,15 @@ class QuizzesController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update(Request $request, quiz $quizzes)
+	public function update(Request $request, quiz $quiz)
 	{
-		//
+		// dd($request, $quiz);
+		$validated = $request->validate([
+			'visibility' => 'required|boolean',
+		]);
+
+		$quiz->update($validated);
+
 	}
 
 	/**

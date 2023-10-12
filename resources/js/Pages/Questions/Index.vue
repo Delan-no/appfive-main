@@ -13,7 +13,7 @@ const nbr = ref(0)
 <template>
     <div v-for="quiz in quizzes.quizzes" :key="quiz.id">
         <p> Quiz : {{ quiz.id }} {{ quiz.type }} || {{ quiz.title }}
-            <Link :href="route('quizzes.show', quiz)">Composer</Link>
+            <a :href="route('quizzes.show', quiz)">Composer</a>
         </p>
 		{{ console.log(quiz) }}
     </div>

@@ -62,9 +62,6 @@ export default {
 		}
 	},
 	methods: {
-		storeQuiz() {
-			this.quizForm.post('/quizzes');
-		},
 		store() {
 			// this.quizForm.questions = this.quizzes
 			for (let i = 0; i < this.quizzes.length; i++) {
@@ -238,7 +235,7 @@ export default {
 			</button>
 		</form>
 	</div>
-	<div id="div" v-for="(quiz, u) of quizzes" :key="u" v-if="quizzes">
+	<div id="div" v-for="(quiz, u) of quizzes" :key="u">
 		<p>
 			{{ quiz.question.text }}
 		</p>
