@@ -94,6 +94,9 @@ export default {
 			prevActif: ref(true),
 			nextActif: ref(false),
 			submitActif: ref(true),
+			selectedInput: ref(null),
+			selectedChoices: [],
+			answersStocker: localStorage,
 			nbr: ref(0),
 			state: ref({
 				min: this.duration - 1,
@@ -101,21 +104,20 @@ export default {
 				cent: 99,
 				intervalID: "",
 			}),
-			allAnswers : this.$inertia.form({
-				answers : [],
+			allAnswers: this.$inertia.form({
+				answers: [],
 			}),
-			userAnswer : this.$inertia.form({
-				'id' : uuid(),
-				'possible_answer_id' : '',
-				'question_id' :'' ,
-				'quiz_id' :this.quiz.id , 
+			userAnswer: this.$inertia.form({
+				'id': uuid(),
+				'possible_answer_id': '',
+				'question_id': '',
+				'quiz_id': this.quiz.id,
 			}),
 		}
 	},
 	methods: {
 		startQuizz() {
 			this.state.intervalID = setInterval(() => {
-				console.log(this.duration);
 				if (this.state.min > -1) {
 					this.state.cent--;
 					if (this.state.cent === 0) {
@@ -142,6 +144,7 @@ export default {
 				this.nextActif = true
 				this.submitActif = false
 			}
+			this.selectedInput = null;
 		},
 		preview(tableau) {
 			this.nbr = this.nbr - 1;
@@ -152,6 +155,7 @@ export default {
 				this.nextActif = false
 				this.submitActif = true
 			}
+			this.selectedInput = null;
 		},
 		doubleNum(number) {
 			if (number < 10) {
@@ -159,7 +163,23 @@ export default {
 			} else {
 				return number;
 			}
-		}
+		},
+		addAnswers(possible_answer, i, question, name) {
+			var radios = document.getElementsByName('name');
+			for (var i = 0; i < radios.length; i++) {
+				if (radios[i].value !== this.nomDuModele) {
+					radios[i].checked = false;
+				}
+			}
+			this.selectedChoices[i] = {
+				'id': this.userAnswer.id,
+				'possible_answer': possible_answer.id,
+				'question_id': question.id,
+				'quiz_id': this.userAnswer.quiz_id,
+			}
+			this.userAnswer.id = uuid();
+			console.log(this.selectedChoices);
+		},
 	}
 }
 </script>
@@ -195,7 +215,8 @@ export default {
 						<form @submit.prevent="store()">
 							<div>
 								<ol v-for="possible_answer, i in questions[nbr].possible_answers" :key="i">
-									<input type="radio" :name="quiz.id">
+									<input type="radio" :name="quiz.id"
+										@change="addAnswers(possible_answer, nbr, questions[nbr])" v-model="selectedInput">
 									<label id="reponse">{{ possible_answer.text }}</label>
 								</ol>
 							</div>
