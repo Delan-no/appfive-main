@@ -94,7 +94,7 @@ class QuizzesController extends Controller
 	{
 		$tab = quiz::with('question')->with('possibleAnswer', function ($query) {
 			$query->with('question');
-		})->findOrFail($quiz->id);
+		})->findOrFail($quiz->id)->toArray();
 		// chnger() {
 		// 	for (let i = 0; i < this.tab.question.length; i++) {
 		// 		this.quizReal.push(this.tab.question[i]);
@@ -104,23 +104,23 @@ class QuizzesController extends Controller
 		// 	}
 		// 	return this.quizReal;
 		// }
+		// dd($tab);
 		$quizzes = [];
-		for ($i=0; $i < count($tab->question); $i++) {
-			array_push($quizzes, $tab[$i]->question);
-			for ($u=0; $u < count(); $u++) { 
-				$quizzes[$u]->possible_answers = array_filter();
+		function verify ($el, $u, $quizzes){
+			$el['question_id'] == $quizzes['question'][$u]->id;
+		}
+		for ($i=0; $i < count($tab['question']); $i++) {
+			array_push($quizzes, $tab['question'][$i]);
+			$quizzes[$i]['possible_answers'] = [];
+			for ($u=0; $u < count($tab['possible_answer']); $u++) {
+				if ($quizzes[$i]['id'] === $tab['possible_answer'][$u]['question_id']) {
+					array_push($quizzes[$i]['possible_answers'], $tab['possible_answer'][$u]);
+				}
 			}
 		}
-
-
-
-
-
-
-
-
 		return Inertia::render('Questions/Show', [
-			// 'quiz' => 
+			'quiz' => $tab,
+			'questions' => $quizzes,
 		]);
 
 	}
