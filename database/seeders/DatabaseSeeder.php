@@ -46,20 +46,11 @@ class DatabaseSeeder extends Seeder
         // Assessment::factory(10)->create();
         // Session::factory()->count(5)->create();
         // Rating::factory(10)->create();
-<<<<<<< HEAD
-        // Externe_user::factory()->count(5)->create();
-        quiz::factory(20)->create();
-        // questions::factory(100)->create();
-        // possible_answer::factory(10)->create();
-        // user_answer::factory(10)->create();
-        // user_note::factory(10)->create();
-=======
         // ExterneUser::factory()->count(5)->create();
-        Quiz::factory(5)->create();
+        // Quiz::factory(5)->create();
         // questions::factory(100)->create();
         // PossibleAnswer::factory(10)->create();
         // UserAnswer::factory(10)->create();
         // UserNote::factory(10)->create();
->>>>>>> 4a1364fade05dcafe3806377a15c2e51edc45491
     }
 }
