@@ -90,6 +90,8 @@ export default {
 	data() {
 		return {
 			cacher: ref(true),
+			notes: ref([]),
+			finalNotes: ref(0),
 			duration: Number(this.quiz.duration),
 			prevActif: ref(true),
 			nextActif: ref(false),
@@ -112,10 +114,11 @@ export default {
 			}),
 		}
 	},
+
 	methods: {
 		startQuizz() {
 			this.state.intervalID = setInterval(() => {
-				console.log(this.duration);
+				// console.log(this.duration);
 				if (this.state.min > -1) {
 					this.state.cent--;
 					if (this.state.cent === 0) {
@@ -159,6 +162,25 @@ export default {
 			} else {
 				return number;
 			}
+		},
+		moyenne(possible_answer) {
+			if (possible_answer.state === 1) {
+				this.notes[this.nbr] = 1;
+			} else {
+				this.notes[this.nbr] = 0;
+			}
+			console.log(this.notes);
+		},
+		returnMoyenne() {
+			this.notes.forEach(el => {
+				if (el === 1) {
+					this.finalNotes++;
+				} else {
+					this.finalNotes;
+				}
+			});
+			console.log(this.finalNotes);
+			return this.finalNotes;
 		}
 	}
 }
@@ -195,7 +217,7 @@ export default {
 						<form @submit.prevent="store()">
 							<div>
 								<ol v-for="possible_answer, i in questions[nbr].possible_answers" :key="i">
-									<input type="radio" :name="quiz.id">
+									<input type="radio" :name="quiz.id" @click="moyenne(possible_answer)">
 									<label id="reponse">{{ possible_answer.text }}</label>
 								</ol>
 							</div>
@@ -205,10 +227,11 @@ export default {
 							<button @click.prevent="next(quiz.question.length)" :class="{ hidden: nextActif }">
 								Suivant
 							</button>
-							<button :class="{ hidden: submitActif }">
+							<button :class="{ hidden: submitActif }" @click="returnMoyenne()">
 								Envoyer
 							</button>
 						</form>
+						<p>{{ this.finalNotes }}</p>
 					</div>
 				</div>
 			</div>

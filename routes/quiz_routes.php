@@ -22,4 +22,4 @@ Route::post('user', [UserAnswerController::class, 'store']);
 
 
 
-// Route::resource('questions', QuestionsController::class)->only('index', 'store');
+Route::resource('questions', QuestionsController::class)->only('index', 'store');
