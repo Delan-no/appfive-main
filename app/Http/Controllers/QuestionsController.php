@@ -39,6 +39,7 @@ class QuestionsController extends Controller
     {
         // dd($request->all());
         $quest = questions::create($request->all());
+        dd($request);
         // $validate = $request->validate([
         //     'texte' => 'required|string|max:255',
         //     'image' => 'string|max:255',

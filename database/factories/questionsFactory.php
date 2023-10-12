@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\quiz;
+use App\Models\Quiz;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,7 +23,7 @@ class questionsFactory extends Factory
             'text' => $this->faker->sentence(10),
             'image' => $this->faker->sentence(1),
             'quiz_id' =>    function (){
-                return quiz::inRandomOrder()->first()->id;
+                return Quiz::inRandomOrder()->first()->id;
             },
         ];
     }

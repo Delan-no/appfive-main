@@ -43,7 +43,7 @@ watch(searchValue, () => {
 									New Quiz
 								</a>
 							</div>
-							<form class="group relative">
+							<form class="group relative" @submit.prevent>
 								<svg width="20" height="20" fill="currentColor"
 									class="absolute left-3 top-1/2 -mt-2.5 text-slate-400 pointer-events-none group-focus-within:text-blue-500"
 									aria-hidden="true">
