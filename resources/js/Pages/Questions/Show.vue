@@ -1,84 +1,3 @@
-<!-- <script setup>
-// defineProps(['quiz']) // Les questions provenant du contrôleur
-// function submitAnswer() {
-	// Envoyer les réponses au serveur
-	// answersForm.post('/useranswer', {
-	//     answers: selectedChoices,
-	// })
-// }
-
-
-// defineProps(['quiz']);
-// const prevActif = ref(true);
-// const nextActif = ref(false);
-// const submitActif = ref(true);
-
-
-// const nbr = ref(0);
-
-// let userAnswerTable = useForm({
-// 	answers: [],
-// });
-
-/* Fonction qui lance le Timer */
-// function startQuizz() {
-// 	state.intervalID = setInterval(() => {
-// 		if (state.min > -1) {
-// 			state.cent--;
-// 			if (state.cent === 0) {
-// 				state.cent = 99;
-// 				state.secondes--;
-// 			} else if (state.secondes === 0) {
-// 				state.secondes = 60;
-// 				state.min--;
-// 			}
-// 		} else if (state.min <= -1) {
-// 			clearInterval(state.intervalID);
-// 			state.min = 0;
-// 			state.cent = 0;
-// 			state.secondes = 0;
-// 		}
-// 	}, 10);
-// }
-
-
-/* Fonction qui format le time 00:00 */
-// function doubleNum(number) {
-// 	if (number < 10) {
-// 		return '0' + number;
-// 	} else {
-// 		return number;
-// 	}
-// }
-
-
-
-
-/* Fonction pour le Next */
-// next(tableau) {
-// 	nbr.value = nbr.value + 1;
-// 	if (nbr.value >= 1) {
-// 		prevActif.value = false
-// 	}
-// 	if (nbr.value >= tableau - 1) {
-// 		nextActif.value = true
-// 		submitActif.value = false
-// 	}
-// }
-
-/* Fonction pour le précédent */
-// const preview = (tableau) => {
-// 	nbr.value = nbr.value - 1;
-// 	if (nbr.value < 1) {
-// 		prevActif.value = true
-// 	}
-// 	if (nbr.value <= tableau) {
-// 		nextActif.value = false
-// 		submitActif.value = true
-// 	}
-// }
-
-</script> -->
 <script>
 import { ref, reactive } from 'vue';
 import { v4 as uuid } from "uuid";
@@ -110,12 +29,13 @@ export default {
 				'question_id' :'' ,
 				'quiz_id' :this.quiz.id , 
 			}),
+			
+
 		}
 	},
 	methods: {
 		startQuizz() {
 			this.state.intervalID = setInterval(() => {
-				console.log(this.duration);
 				if (this.state.min > -1) {
 					this.state.cent--;
 					if (this.state.cent === 0) {
@@ -136,7 +56,7 @@ export default {
 		next(tableau) {
 			this.nbr = this.nbr + 1;
 			if (this.nbr >= 1) {
-				this.$attrsprevActif = false
+				this.prevActif = false
 			}
 			if (this.nbr >= tableau - 1) {
 				this.nextActif = true
@@ -159,6 +79,9 @@ export default {
 			} else {
 				return number;
 			}
+		},
+		soumettre() {
+			
 		}
 	}
 }
@@ -181,9 +104,7 @@ export default {
 			<div>
 				<div class="flex justify-between font-bold text-2xl border-b-4 border-gray-800">
 					<p class="">{{ quiz.title }}</p>
-					<p class="">{{ doubleNum(state.min) }} : {{ doubleNum(state.secondes) }} : {{
-						doubleNum(state.cent)
-					}}</p>
+					<p>{{ doubleNum(state.min) }} : {{ doubleNum(state.secondes) }} : {{ oubleNum(state.cent) }}</p>
 				</div>
 
 				<div class="container mx-auto max-w-3xl mt-6">
@@ -191,12 +112,13 @@ export default {
 						<div class="text-center text-slate-900 group-hover:text-white text-xl font-semibold border-b-2">
 							Question {{ nbr + 1 }}
 						</div>
-						{{ questions[nbr].text }}
 						<form @submit.prevent="store()">
+							{{ questions[nbr].text }}
 							<div>
 								<ol v-for="possible_answer, i in questions[nbr].possible_answers" :key="i">
-									<input type="radio" :name="quiz.id">
+									<input type="radio" name="prop_answ">
 									<label id="reponse">{{ possible_answer.text }}</label>
+									{{ console.log(possible_answer.id) }}
 								</ol>
 							</div>
 							<button @click.prevent="preview(quiz.question.length)" :class="{ hidden: prevActif }">
@@ -205,7 +127,7 @@ export default {
 							<button @click.prevent="next(quiz.question.length)" :class="{ hidden: nextActif }">
 								Suivant
 							</button>
-							<button :class="{ hidden: submitActif }">
+							<button @click.prevent="soumettre()" :class="{ hidden: submitActif }">
 								Envoyer
 							</button>
 						</form>

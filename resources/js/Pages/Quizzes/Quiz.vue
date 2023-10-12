@@ -1,18 +1,3 @@
-
-<script setup>
-const maMémoire = localStorage;
-
-</script>
-<style>
-button {
-	/* border: 1px solid red; */
-	margin-left: 1rem;
-}
-
-.bi-trash {
-	color: red;
-}
-</style>
 <script>
 import { v4 as uuid } from "uuid";
 export default {
@@ -73,10 +58,6 @@ export default {
 			this.monQuiz.clear();
 			this.quizForm.post('/quizzes');
 			
-		},
-		addAns() {
-			maMémoire.setItem('')
-			let w
 		},
 		destroy(chirp) {
 			this.$inertia.delete(`/chirps/${chirp.id}`)
@@ -258,3 +239,16 @@ export default {
 	</div>
 	<button @click="store">Soumettre</button>
 </template>
+
+
+
+<style>
+button {
+	/* border: 1px solid red; */
+	margin-left: 1rem;
+}
+
+.bi-trash {
+	color: red;
+}
+</style>
