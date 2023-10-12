@@ -31,9 +31,9 @@ const form = useForm({
 				<input type="text" placeholder="Description Quizz"
 					class="my-4 rounded-lg w-96 border-solid border-2 border-gray-400 text-gray-950 p-2">
 
-				<select id="quizz" name="quizz" v-model="quizz" @change="toggle(0)"
+				<select id="quizz" name="quizz" 
 					class="rounded-lg w-96 border-solid border-2 border-gray-400 text-gray-950 p-2">
-					<option disabled value="">Type de Quizz</option>
+					<option disabled value="" selected>Type de Quizz</option>
 					<option value="Général">Général</option>
 					<option value="Collectif">Collectif</option>
 					<option value="Psychotechnique">Psychotechnique</option>
@@ -42,9 +42,9 @@ const form = useForm({
 					<option value="type8">type8</option>
 				</select>
 
-				<select id="quiz" name="quiz"
+				<select id="time" name="time" v-model="time" @change="toggle(0)"
 					class="my-4 rounded-lg w-96 border-solid border-2 border-gray-400 text-gray-950 p-2" >
-					<option value="type1" selected>Time Quizz</option>
+					<option disabled value="" selected>Time Quizz</option>
 					<option value="type2" >10 mins</option>
 					<option value="type3" >20 mins</option>
 					<option value="type4" >30 mins</option>
@@ -114,7 +114,7 @@ export default {
 	data() {
 		return {
 			show:[false, false],
-			quizz:"",
+			time:"",
 			detail_quizz:""
 		}
 	},
