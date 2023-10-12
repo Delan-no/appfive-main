@@ -11,7 +11,7 @@ use Laravel\Jetstream\Features;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class Externe_userFactory extends Factory
+class ExterneUserFactory extends Factory
 {
     /**
      * Define the model's default state.

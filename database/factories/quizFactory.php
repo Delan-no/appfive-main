@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Models\Interne_user;
+use App\Models\InterneUser;
 use App\Models\Externe_user;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -21,14 +21,14 @@ class quizFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => $this->faker->numberBetween(36),
+            'id' => $this->faker->uuid(),
             'type' => $this->faker->word(),
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->sentence(70),
             'duration' => $this->faker->numberBetween(2),
-            'visibility' => $this->faker->boolean(),
+            'visibility' => true,
             'interne_user_id' =>    function (){
-                return Interne_user::inRandomOrder()->first()->id;
+                return InterneUser::inRandomOrder()->first()->id;
             },
         ];
     }

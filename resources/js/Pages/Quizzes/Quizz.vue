@@ -1,7 +1,7 @@
 <script setup>
+import { useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
-defineProps(['quizz']);
 
 let show = ref(false);
 let hidden = ref(true);
@@ -10,12 +10,31 @@ let toggle = () => {
     show.value = !show.value;
     hidden.value = !hidden.value;
 }
+const props = defineProps(['quizz']);
 
+
+
+const form = useForm({
+    visibility: props.quizz.visibility,
+})
+
+// let active = ref(true);
+
+function showVisibility(quizz) {
+
+    router.patch(`/quizzes/${quizz.id}`, { visibility: true }, quizz.id);
+
+}
+function hideVisibility(quizz) {
+
+    router.patch(`/quizzes/${quizz.id}`, { visibility: false }, quizz.id);
+
+}
 </script>
 
 <template>
     <div
-        class="hover:bg-gray-200 group rounded-3xl border-solid  bg-gray-100 border-amber-400 text-gray-800 text-xl font-medium pl-2 pr-3 py-2 shadow-sm ">
+        class="hover:bg-gray-200 group rounded-3xl border-solid  bg-gray-100 border-amber-400 text-gray-800 text-xl font-medium pl-2 pr-3 py-2 shadow-sm">
         <div>
             <div class="flex justify-between sticky top-0">
                 <div class="h-7 w-30  bg-yellow-300 flex items-center justify-center rounded-xl">
@@ -23,15 +42,18 @@ let toggle = () => {
                 </div>
                 <div>
                     <transition>
-                        <button class="ml-3.5 relative" @click="toggle">
-                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1" :class="{opacity : hidden === true}">
+                        <button class="ml-3.5 relative" @click="toggle(); showVisibility(quizz)">
+                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1"
+                                :class="{ opacity: hidden === true }">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                     class="bi bi-toggle-off" viewBox="0 0 16 16">
                                     <path
                                         d="M11 4a4 4 0 0 1 0 8H8a4.992 4.992 0 0 0 2-4 4.992 4.992 0 0 0-2-4h3zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5z" />
                                 </svg>
                             </span>
-                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1" :class="{opacity : show === true}">
+                 
+                            <span class="absolute opacity-0 transition duration-500 bottom-0 right-1"
+                                :class="{ opacity: show === true }">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                     class="bi bi-toggle-on red-600" viewBox="0 0 16 16">
                                     <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
@@ -39,7 +61,6 @@ let toggle = () => {
                             </span>
                         </button>
                     </transition>
-
 
                     <button class="ml-3.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#84cc16"
@@ -58,53 +79,9 @@ let toggle = () => {
                 </div>
 
 
-                <!-- <Dropdown>
-                    <template #default>
-                        <button>
-                            <button class="text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-three-dots" viewBox="0 0 16 16">
-                                    <path
-                                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-                                </svg>
-                            </button>
-                            <button
-                                class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-200 transition duration-150 ease-in-out">
-                                Activer
-                            </button>
-                            <Link :href="route('quizzes.show', quizz)" method="get" :active="route().current('quizzes.show')"
-                                class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-200 transition duration-150 ease-in-out">
-                            Modifier
-                            </Link>
-                            <Link :href="route('quizzes.destroy', quizz)" method="DELETE"
-                                class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-200 transition duration-150 ease-in-out">
-                            Supprimer
-                            </Link>
-                        </button>
-                    </template>
-                </Dropdown -->
-
-                <!-- <Dropdown class="mt-1">
-                    <template #default>
-                        <div class="group flex items-center cursor-pointer select-none">
-                            <div>
-                                <span>fghfgh</span>
-                            </div>
-                            <Icon class="w-5 h-5 fill-gray-700 group-hover:fill-yellow-600 focus:fill-yellow-600"
-                                name="cheveron-down" />
-                        </div>
-                    </template>
-                    <template #dropdown>
-                        <div class="mt-2 py-2 text-sm bg-white rounded shadow-xl">
-                            <Link class="block px-6 py-2 w-full text-left hover:text-white hover:bg-yellow-500"
-                                href="/logout" method="delete" as="button">Logout</Link>
-                        </div>
-                    </template>
-                </Dropdown> -->
-
             </div>
 
-            <div class=" overflow-y-auto h-40 w-30">
+            <div class="description overflow-y-auto h-40">
                 <h2 class="mt-6 ml-1 font-medium text-gray-00 font-semibold">{{ quizz.title }}</h2>
                 <p class="mt-4 text-sm ml-1 leading-relaxed static">
                     {{ quizz.description }}
@@ -113,16 +90,41 @@ let toggle = () => {
         </div>
 
     </div>
+    <!-- <div v-if="quizz.visibility === 0">
+        <div class="absolute right-3 bottom-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-square bg-red-500" viewBox="0 0 16 16">
+                <path
+                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+            </svg>
+        </div>
+
+    </div>
+    <div v-if="quizz.visibility === 1">
+        <div class="absolute right-3 bottom-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-square bg-green-500" viewBox="0 0 16 16">
+                <path
+                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+            </svg>
+        </div> -->
+    <!-- </div> -->
 </template>
 
 
 <style>
-    .opacity {
-        opacity: 1 !important;
-    }
+.opacity {
+    opacity: 1 !important;
+}
+
+.description::-webkit-scrollbar {
+    margin-left: 5px;
+    width: 5px;
+}
+
+.description::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
 </style>
-
-
-
-
-
