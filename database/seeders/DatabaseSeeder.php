@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
         // Externe_user::factory()->count(5)->create();
         // quiz::factory(5)->create();
         // questions::factory(10)->create();
-        // possible_answer::factory(40)->create();
+        // possible_answer::factory(150)->create();
         // user_answer::factory(10)->create();
         // user_note::factory(10)->create();
     }

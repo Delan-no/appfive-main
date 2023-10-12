@@ -5,8 +5,10 @@ import { ref, onBeforeMount, reactive } from 'vue';
 // defineProps(['quiz']);
 let quiz = defineProps(['quiz']);
 let cacher = ref(true)
+let selectInput = ref(null);
 
 let duration = parseInt(quiz.quiz.duration);
+
 let state = reactive({
     min: duration - 1,
     secondes: 59,
@@ -20,7 +22,7 @@ const nextActif = ref(false);
 const submitActif = ref(true);
 
 
-
+/* Fonction qui récupère question et probility_answer lié au Quiz dans un tableau */
 let quizReal = [];
 
 function chnger() {
@@ -37,7 +39,6 @@ onBeforeMount(() => {
 	chnger();
 	console.log(quizReal);
 })
-
 
 /* Fonction qui lance le Timer */
 function startQuizz() {
@@ -71,8 +72,6 @@ function doubleNum(number) {
 }
 
 
-
-
 /* Fonction pour le Next */
 const next = (tableau) => {
 	nbr.value = nbr.value + 1;
@@ -83,6 +82,7 @@ const next = (tableau) => {
 		nextActif.value = true
 		submitActif.value = false
 	}
+	selectInput = null;
 }
 
 /* Fonction pour le précédent */
@@ -95,6 +95,7 @@ const preview = (tableau) => {
 		nextActif.value = false
 		submitActif.value = true
 	}
+	selectInput = null;
 }
 
 const submit = () => {
@@ -123,33 +124,34 @@ const submit = () => {
 			<div>
 				<div class="flex justify-between font-bold text-2xl border-b-4 border-gray-800">
 					<p class="">{{ quiz.quiz.title}}</p>
-					<p class="">{{ doubleNum(state.min) }} : {{ doubleNum(state.secondes) }} : {{ doubleNum(state.cent) }}</p>
+					<p class="">{{ doubleNum(state.min) }} : {{ doubleNum(state.secondes) }} </p>
 				</div>
 
 				<div class="container mx-auto max-w-3xl mt-6">
-					<div class="border-solid border-2 rounded-lg bg-white">
-						<div class="text-center text-slate-900 group-hover:text-white text-xl font-semibold border-b-2">
-							Question {{ nbr + 1 }}
+					<form action="" class="">
+						<div class="border-solid border-2 rounded-lg bg-white">
+							<div class="text-center text-slate-900 group-hover:text-white text-xl font-semibold border-b-2">
+								Question {{ nbr + 1 }}
+							</div>
+							{{ quizReal[nbr].text }}
+							<div v-if="quizReal[nbr].possible_answers">
+								<ol v-for="possible_answer in quizReal[nbr].possible_answers">
+									<input type="radio" v-model="selectInput" id="reponse" :value="possible_answer.id">
+									<label for="reponse">{{ possible_answer.text }}</label>
+								</ol>
+							</div>
+							<button @click.prevent="preview(quiz.quiz.question.length)" :class="{ hidden: prevActif }">
+								Précédent
+							</button>
+							<button @click.prevent="next(quiz.quiz.question.length)" :class="{ hidden: nextActif }">
+								Suivant
+							</button>
+							<button @click.prevent="submit" :class="{ hidden: submitActif }">
+								Envoyer
+							</button>
 						</div>
-						{{ quizReal[nbr].text }}
-						<div v-if="quizReal[nbr].possible_answers">
-							<ol v-for="possible_answer in quizReal[nbr].possible_answers">
-								<input type="radio" name="possible_answer" id="reponse" :value="possible_answer.id">
-								<label id="reponse">{{ possible_answer.text }}</label>
-							</ol>
-						</div>
-						<button @click.prevent="preview(quiz.quiz.question.length)" :class="{ hidden: prevActif }">
-							Précédent
-						</button>
-						<button @click.prevent="next(quiz.quiz.question.length)" :class="{ hidden: nextActif }">
-							Suivant
-						</button>
-						<button @click.prevent="submit" :class="{ hidden: submitActif }">
-							Envoyer
-						</button>
-					</div>
+					</form>
 				</div>
-				{{ quiz.quiz.question.length }}
 			</div>
 		</div>
 	</div>

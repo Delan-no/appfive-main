@@ -49,12 +49,12 @@ class QuestionsController extends Controller
      */
     public function show(quiz $quiz)
     {
+        // dd($quiz);
         // $quiz = quiz::with(['question','possible_answer'])->get();
         $quiz = quiz::with('question')->with('possible_answer', function ($query) {
             $query->with('question');
         })->findOrFail(866263337);
         
-        // dd($quiz);
         return Inertia::render('Questions/Show', [
             'quiz' => $quiz,
         ]);
