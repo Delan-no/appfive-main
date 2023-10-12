@@ -24,7 +24,7 @@ class quizFactory extends Factory
             'id' => $this->faker->numberBetween(36),
             'type' => $this->faker->word(),
             'title' => $this->faker->sentence(3),
-            'description' => $this->faker->sentence(20),
+            'description' => $this->faker->sentence(70),
             'duration' => $this->faker->numberBetween(2),
             'visibility' => $this->faker->boolean(),
             'interne_user_id' =>    function (){

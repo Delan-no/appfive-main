@@ -15,7 +15,7 @@ let toggle = () => {
 
 <template>
     <div
-        class="hover:bg-gray-200 group flex rounded-3xl border-solid  bg-gray-100 border-amber-400 text-gray-800 text-xl font-medium pl-2 pr-3 py-2 shadow-sm ">
+        class="hover:bg-gray-200 group rounded-3xl border-solid  bg-gray-100 border-amber-400 text-gray-800 text-xl font-medium pl-2 pr-3 py-2 shadow-sm ">
         <div>
             <div class="flex justify-between sticky top-0">
                 <div class="h-7 w-30  bg-yellow-300 flex items-center justify-center rounded-xl">
@@ -104,7 +104,7 @@ let toggle = () => {
 
             </div>
 
-            <div class=" overflow-y-auto h-40 ">
+            <div class=" overflow-y-auto h-40 w-30">
                 <h2 class="mt-6 ml-1 font-medium text-gray-00 font-semibold">{{ quizz.title }}</h2>
                 <p class="mt-4 text-sm ml-1 leading-relaxed static">
                     {{ quizz.description }}

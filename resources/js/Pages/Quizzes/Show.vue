@@ -1,19 +1,3 @@
-
-<!-- <template>
-  <AppLayout>
-    
-      <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
-        <p class="mt-4 text-lg text-gray-900">Type Quiz : {{ quiz.type }}</p>
-        <p class="mt-4 text-lg text-gray-900">Title Quiz : {{ quiz.title }}</p>
-        <p class="mt-4 text-lg text-gray-900">
-          Description Quiz : {{ quiz.description }}
-        </p>
-      </div>
-      <div class="mt-3 ml-3 ">
-        <Link :href="route('quizzes.index')" :active="route().current('quizzes.index')"> Back </Link>
-      </div>
-  </AppLayout>
-</template> -->
 <script>
 import { useForm, Head } from '@inertiajs/vue3';
 export default {
