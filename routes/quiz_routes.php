@@ -8,15 +8,10 @@ use Inertia\Inertia;
 
 Route::resource('quizzes', QuizzesController::class);
 
-
-
-
-
 Route::get('quiz', [QuizzesController::class, 'indexQuiz'])->name('quiz');
 
 
 Route::post('user', [UserAnswerController::class, 'store']);
-
 
 
 

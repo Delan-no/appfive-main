@@ -47,9 +47,9 @@ class DatabaseSeeder extends Seeder
         // Session::factory()->count(5)->create();
         // Rating::factory(10)->create();
         // ExterneUser::factory()->count(5)->create();
-        Quiz::factory(5)->create();
+        // Quiz::factory(5)->create();
         // questions::factory(100)->create();
-        // PossibleAnswer::factory(10)->create();
+        PossibleAnswer::factory(150)->create();
         // UserAnswer::factory(10)->create();
         // UserNote::factory(10)->create();
     }

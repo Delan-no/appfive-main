@@ -13,12 +13,13 @@ export default {
 			prevActif: ref(true),
 			nextActif: ref(false),
 			submitActif: ref(true),
-
-			selectedInput: " ", // initialisation du variable à null
+			tab : [],
+			selectedInput: ref('on'), // initialisation du variable à null
 			reponse_soumis: [], // tableau prenant le choix de l'utilisateur
+			answersStocker: localStorage,
+
 
 			selectedChoices: [],
-			answersStocker: localStorage,
 			nbr: ref(0),
 			state: ref({
 				min: this.duration - 1,
@@ -60,8 +61,11 @@ export default {
 		},
 		/* Fonction Question suivante */
 		next(tableau) {
+			this.answersStocker.setItem('userAns', JSON.stringify(this.selectedInput))
+			// this.reponse_soumis.push(this.answersStocker);
+			this.selectedInput = 'off'
+			this.selectedInput = 'on'
 			this.nbr = this.nbr + 1;
-			// this.selectedInput = null; // rappel de la variable null
 			if (this.nbr >= 1) {
 				this.prevActif = false
 			}
@@ -72,8 +76,10 @@ export default {
 		},
 		/* Fonction Question précédente */
 		preview(tableau) {
+			this.selectedInput = JSON.parse(this.answersStocker.getItem('userAns'))
+			this.selectedInput = 'off'
+			this.selectedInput = 'on'
 			this.nbr = this.nbr - 1;
-			// this.selectedInput = null; // rappel de la variable null
 			if (this.nbr < 1) {
 				this.prevActif = true
 			}
@@ -89,42 +95,40 @@ export default {
 				return number;
 			}
 		},
-		addAnswers(possible_answer, i, question, name) {
-			var radios = document.getElementsByName('name');
-			for (var i = 0; i < radios.length; i++) {
-				if (radios[i].value !== this.nomDuModele) {
-					radios[i].checked = false;
-				}
-			}
+		addAnswers(possible_answer, i, question, u) {
+			this.tab[i] = { quest : question.text, index: u};
 			this.selectedChoices[i] = {
 				'id': this.userAnswer.id,
 				'possible_answer': possible_answer.id,
 				'question_id': question.id,
 				'quiz_id': this.userAnswer.quiz_id,
 			}
-			this.userAnswer.id = uuid();
-			console.log(this.selectedChoices);
-			this.answersStocker.setItem('userAns', JSON.stringify(this.userAnswer))
-			this.answersStocker.setItem('id', JSON.stringify(this.selectedChoices[i].id));
-			this.answersStocker.setItem('possible_answer_id', JSON.stringify(this.selectedChoices[i].possible_answer));
-			this.answersStocker.setItem('question_id', JSON.stringify(this.selectedChoices[i].question_id));
-			this.answersStocker.setItem('quiz_id', JSON.stringify(this.selectedChoices[i].quiz_id));
-						
-			console.log(this.answersStocker);
-
-
-
-			// for (let i = 0; i < this.questions.length; i++) {
-			// 	this.reponse_soumis.push(possible_answer.id[i])				
-			// }
-			// console.log(this.reponse_soumis);
-			// console.log(this.questions.length);
-			// console.log(possible_answer.id);
+			this.userAnswer.id = uuid()
+			this.answersStocker.setItem('userAns', JSON.stringify(this.selectedChoices[i].possible_answer))
+		},
+		deselectionnerAutresRadios(ind, question, i) {
+			var radios = document.getElementsByName('prop_ans');
+			// console.log(radios);	
+			for (var i = 0; i < radios.length; i++) {
+				console.log(this.tab[ind]);
+				console.log('tab[ind].quest =>  ' + this.tab[ind].quest);
+				console.log('question =>  ' + question);
+				console.log('i =>  ' + i);
+				console.log('this.tab[ind].index =>  ' + this.tab[ind].index)
+				if (this.tab[ind] && this.tab[ind].quest === question  && i === this.tab[ind].index) {
+					radios[i].checked = true;
+					console.log(true);
+				}else{
+					radios[i].checked = false;
+					console.log(false);
+				}
+			}
 		},
 		soumettre() {
 
 		},
 		beforeMount() {
+			this.selectedInput = JSON.parse(this.answersStocker.s)
 		}
 	}
 }
@@ -158,15 +162,16 @@ export default {
 						<form @submit.prevent="store()">
 							{{ questions[nbr].text }}
 							<div>
-								<ul v-for="possible_answer, i in questions[nbr].possible_answers" :key="i">
-									<input type="radio" v-model="selectedInput" name="prop_ans" :id="possible_answer.id" @change="addAnswers(possible_answer, nbr, questions[nbr])">
+								<ul v-for="(possible_answer, i) in questions[nbr].possible_answers" :key="i">
+									<input type="radio" name="prop_ans" :id="possible_answer.id"
+										@change="addAnswers(possible_answer, nbr, questions[nbr],i)">
 									<label :for="possible_answer.id">{{ possible_answer.text }}</label>
 								</ul>
 							</div>
-							<button @click.prevent="preview(quiz.question.length)" :class="{ hidden: prevActif }">
+							<button @click.prevent="preview(quiz.question.length); deselectionnerAutresRadios(nbr, questions[nbr].text, i)" :class="{ hidden: prevActif }">
 								Précédent
 							</button>
-							<button @click.prevent="next(quiz.question.length);" :class="{ hidden: nextActif }">
+							<button @click.prevent="next(quiz.question.length,props_ans); deselectionnerAutresRadios(nbr, questions[nbr].text, i)" :class="{ hidden: nextActif }">
 								Suivant
 							</button>
 							<button @click.prevent="soumettre()" :class="{ hidden: submitActif }">
