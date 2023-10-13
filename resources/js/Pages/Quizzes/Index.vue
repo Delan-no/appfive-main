@@ -11,7 +11,8 @@ const searchValue = ref('');
 // Fonction pour filtrer les quizzes
 function filterQuizzes() {
 	quizzes.value = props.quizzes.filter((quiz) =>
-	quiz.title.toLowerCase().includes(searchValue.value.toLocaleLowerCase()));
+	// quiz.title.toLowerCase().includes(searchValue.value.toLocaleLowerCase()),
+	quiz.type.toLowerCase().includes(searchValue.value.toLocaleLowerCase()));
 }
 
 watch(searchValue, () => {
